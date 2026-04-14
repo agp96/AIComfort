@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "AIComfort",
+  "version": "1.0.0",
+  "description": "Navegación mejorada para Claude, Gemini y ChatGPT: índice de prompts, scroll rápido y atajos de teclado.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "aicomfort@extension",
+      "strict_min_version": "109.0"
+    }
+  }
+}

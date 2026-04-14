@@ -1,0 +1,604 @@
+/* ============================================================
+   AIComfort – Styles
+   Panel lateral, ajustes, botones flotantes y accesibilidad
+   ============================================================ */
+
+/* ---------- Variables de diseño ---------- */
+:root {
+  --ac-bg:        #1a1a2e;
+  --ac-bg-glass:  rgba(26, 26, 46, 0.88);
+  --ac-surface:   rgba(255, 255, 255, 0.07);
+  --ac-surface-h: rgba(255, 255, 255, 0.14);
+  --ac-border:    rgba(255, 255, 255, 0.12);
+  --ac-accent:    #7c5cfc;
+  --ac-accent-h:  #9b82ff;
+  --ac-text:      #ececf5;
+  --ac-text-dim:  #a9a5c4;
+  --ac-radius:    12px;
+  --ac-shadow:    0 8px 32px rgba(0, 0, 0, 0.35);
+  --ac-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Screen‑reader only ---------- */
+.ac-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ---------- Panel lateral ---------- */
+#aicomfort-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background: var(--ac-bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid var(--ac-border);
+  box-shadow: var(--ac-shadow);
+  z-index: 2147483640;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(0);
+  transition: transform var(--ac-transition);
+  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif !important;
+  color: var(--ac-text);
+}
+
+#aicomfort-panel.ac-hidden {
+  transform: translateX(100%);
+}
+
+/* ─── Cabecera ─── */
+#aicomfort-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--ac-border);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.ac-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+#aicomfort-header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, var(--ac-accent), var(--ac-accent-h));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+#aicomfort-header h2::before {
+  content: '⚡';
+  -webkit-text-fill-color: initial;
+  font-size: 15px;
+}
+
+/* ─── Botón de ajustes en la cabecera ─── */
+#aicomfort-settings-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--ac-border);
+  border-radius: 8px;
+  background: var(--ac-surface);
+  color: var(--ac-text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ac-transition), transform 0.15s ease;
+  padding: 0;
+}
+
+#aicomfort-settings-btn:hover,
+#aicomfort-settings-btn:focus-visible {
+  background: var(--ac-surface-h);
+  transform: scale(1.08);
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 2px;
+}
+
+#aicomfort-settings-btn[aria-pressed='true'] {
+  background: var(--ac-accent);
+  color: #fff;
+}
+
+#aicomfort-badge {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--ac-surface);
+  color: var(--ac-text-dim);
+  border-radius: 20px;
+  padding: 2px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ─── Vistas (prompts / settings) ─── */
+#aicomfort-prompts-view,
+#aicomfort-settings-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ac-view-hidden {
+  display: none !important;
+}
+
+/* ─── Lista de prompts ─── */
+#aicomfort-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ac-surface-h) transparent;
+}
+
+#aicomfort-list::-webkit-scrollbar { width: 5px; }
+#aicomfort-list::-webkit-scrollbar-track { background: transparent; }
+#aicomfort-list::-webkit-scrollbar-thumb {
+  background: var(--ac-surface-h);
+  border-radius: 10px;
+}
+
+.ac-prompt-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  border-radius: var(--ac-radius);
+  cursor: pointer;
+  transition: background var(--ac-transition), transform 0.15s ease;
+  border: 1px solid transparent;
+  line-height: 1.45;
+}
+
+.ac-prompt-item:hover,
+.ac-prompt-item:focus-visible {
+  background: var(--ac-surface-h);
+  border-color: var(--ac-border);
+  transform: translateX(3px);
+  outline: none;
+}
+
+.ac-prompt-item:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: -2px;
+}
+
+.ac-prompt-item:active { transform: scale(0.98); }
+
+.ac-prompt-item.ac-active {
+  background: rgba(124, 92, 252, 0.14);
+  border-color: rgba(124, 92, 252, 0.35);
+}
+
+.ac-prompt-number {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 8px;
+  background: var(--ac-accent);
+  color: #fff;
+}
+
+.ac-prompt-text {
+  font-size: 13px;
+  color: var(--ac-text);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+/* ─── Footer ─── */
+#aicomfort-footer {
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--ac-border);
+  flex-shrink: 0;
+}
+
+.ac-shortcut-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ac-text-dim);
+}
+
+.ac-kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  background: var(--ac-surface);
+  border: 1px solid var(--ac-border);
+  border-radius: 4px;
+  color: var(--ac-text);
+}
+
+/* ============================================================
+   Vista de Ajustes
+   ============================================================ */
+
+.ac-settings-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ac-surface-h) transparent;
+}
+
+.ac-settings-scroll::-webkit-scrollbar { width: 5px; }
+.ac-settings-scroll::-webkit-scrollbar-track { background: transparent; }
+.ac-settings-scroll::-webkit-scrollbar-thumb {
+  background: var(--ac-surface-h);
+  border-radius: 10px;
+}
+
+/* ─── Fila de ajuste ─── */
+.ac-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ac-surface);
+  border: 1px solid transparent;
+  transition: background var(--ac-transition);
+}
+
+.ac-setting-row:hover {
+  background: var(--ac-surface-h);
+}
+
+.ac-setting-row-col {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.ac-setting-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ac-text);
+}
+
+.ac-divider {
+  border: none;
+  border-top: 1px solid var(--ac-border);
+  margin: 6px 0;
+}
+
+/* ─── Toggle switch ─── */
+.ac-toggle-btn {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ac-toggle-btn:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 3px;
+  border-radius: 14px;
+}
+
+.ac-toggle-track {
+  display: block;
+  width: 44px;
+  height: 24px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--ac-border);
+  transition: background var(--ac-transition);
+  position: relative;
+}
+
+.ac-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ac-text-dim);
+  transition: transform var(--ac-transition), background var(--ac-transition);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.ac-toggle-btn.ac-on .ac-toggle-track {
+  background: var(--ac-accent);
+  border-color: var(--ac-accent);
+}
+
+.ac-toggle-btn.ac-on .ac-toggle-thumb {
+  transform: translateX(20px);
+  background: #fff;
+}
+
+/* ─── Stepper (+/- botones) ─── */
+.ac-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ac-border);
+}
+
+.ac-stepper-btn {
+  width: 32px;
+  height: 30px;
+  border: none;
+  background: var(--ac-surface);
+  color: var(--ac-text);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ac-transition);
+  padding: 0;
+}
+
+.ac-stepper-btn:hover {
+  background: var(--ac-surface-h);
+}
+
+.ac-stepper-btn:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: -2px;
+}
+
+.ac-stepper-value {
+  width: 36px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  color: var(--ac-text);
+  background: rgba(0, 0, 0, 0.15);
+  line-height: 30px;
+  user-select: none;
+}
+
+/* ─── Slider ─── */
+.ac-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  transition: background var(--ac-transition);
+}
+
+.ac-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ac-accent);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.ac-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.ac-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ac-accent);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+.ac-slider:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 3px;
+}
+
+/* ─── Slider label row (label + hint) ─── */
+.ac-slider-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ac-slider-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ac-accent-h);
+  letter-spacing: 0.3px;
+}
+
+/* ─── Botones de grupo (scroll, reset) ─── */
+.ac-setting-group {
+  display: flex;
+  gap: 8px;
+}
+
+.ac-scroll-group {
+  margin-bottom: 2px;
+}
+
+.ac-setting-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: 1px solid var(--ac-border);
+  border-radius: 10px;
+  background: var(--ac-surface);
+  color: var(--ac-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background var(--ac-transition), transform 0.15s ease;
+}
+
+.ac-setting-btn:hover {
+  background: var(--ac-surface-h);
+  transform: translateY(-1px);
+}
+
+.ac-setting-btn:active {
+  transform: scale(0.97);
+}
+
+.ac-setting-btn:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 2px;
+}
+
+.ac-scroll-nav-btn {
+  background: linear-gradient(135deg, rgba(124, 92, 252, 0.15), rgba(155, 130, 255, 0.10));
+  border-color: rgba(124, 92, 252, 0.25);
+}
+
+.ac-scroll-nav-btn:hover {
+  background: linear-gradient(135deg, rgba(124, 92, 252, 0.28), rgba(155, 130, 255, 0.18));
+}
+
+.ac-reset-btn {
+  margin-top: 6px;
+  background: rgba(255, 80, 80, 0.08);
+  border-color: rgba(255, 80, 80, 0.18);
+  color: #ff9090;
+}
+
+.ac-reset-btn:hover {
+  background: rgba(255, 80, 80, 0.18);
+}
+
+/* ============================================================
+   Botón toggle del panel (esquina inferior derecha)
+   ============================================================ */
+
+#aicomfort-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483641;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ac-border);
+  border-radius: 12px;
+  background: var(--ac-bg-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ac-transition), transform 0.15s ease;
+  color: var(--ac-text);
+  font-size: 18px;
+  padding: 0;
+}
+
+#aicomfort-toggle:hover {
+  background: var(--ac-surface-h);
+  transform: scale(1.08);
+}
+
+#aicomfort-toggle:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 3px;
+}
+
+
+/* ============================================================
+   Resaltado temporal
+   ============================================================ */
+
+@keyframes ac-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(124, 92, 252, 0.50); }
+  50%  { box-shadow: 0 0 0 6px rgba(124, 92, 252, 0.18); }
+  100% { box-shadow: 0 0 0 0 rgba(124, 92, 252, 0); }
+}
+
+.ac-highlight {
+  animation: ac-flash 0.8s ease-out;
+  border-radius: 8px;
+}
+
+/* ============================================================
+   Estado vacío
+   ============================================================ */
+
+.ac-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--ac-text-dim);
+  padding: 20px;
+  gap: 12px;
+}
+
+.ac-empty-icon { font-size: 36px; opacity: 0.5; }
+.ac-empty-text { font-size: 13px; line-height: 1.5; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 600px) {
+  #aicomfort-panel {
+    width: 270px;
+  }
+}
