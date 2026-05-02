@@ -1,9 +1,9 @@
 /* ============================================================
    AIComfort – Styles
-   Panel lateral, ajustes, botones flotantes y accesibilidad
+   Side panel, settings, floating buttons and accessibility
    ============================================================ */
 
-/* ---------- Variables de diseño ---------- */
+/* ---------- Design variables ---------- */
 :root {
   --ac-bg:        #1a1a2e;
   --ac-bg-glass:  rgba(26, 26, 46, 0.88);
@@ -37,7 +37,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 320px;
+  width: 280px;
   height: 100vh;
   background: var(--ac-bg-glass);
   backdrop-filter: blur(20px);
@@ -57,7 +57,7 @@
   transform: translateX(100%);
 }
 
-/* ─── Cabecera ─── */
+/* ─── Header ─── */
 #aicomfort-header {
   display: flex;
   align-items: center;
@@ -90,13 +90,7 @@
   white-space: nowrap;
 }
 
-#aicomfort-header h2::before {
-  content: '⚡';
-  -webkit-text-fill-color: initial;
-  font-size: 15px;
-}
-
-/* ─── Botón de ajustes en la cabecera ─── */
+/* ─── Settings button in header ─── */
 #aicomfort-settings-btn {
   width: 32px;
   height: 32px;
@@ -138,7 +132,7 @@
   flex-shrink: 0;
 }
 
-/* ─── Vistas (prompts / settings) ─── */
+/* ─── Views (prompts / settings) ─── */
 #aicomfort-prompts-view,
 #aicomfort-settings-view {
   flex: 1;
@@ -151,7 +145,7 @@
   display: none !important;
 }
 
-/* ─── Lista de prompts ─── */
+/* ─── Prompt list ─── */
 #aicomfort-list {
   flex: 1;
   overflow-y: auto;
@@ -224,11 +218,13 @@
   word-break: break-word;
 }
 
-/* ─── Footer ─── */
 #aicomfort-footer {
   padding: 10px 16px 12px;
   border-top: 1px solid var(--ac-border);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ac-shortcut-hint {
@@ -251,7 +247,7 @@
 }
 
 /* ============================================================
-   Vista de Ajustes
+   Settings view
    ============================================================ */
 
 .ac-settings-scroll {
@@ -272,7 +268,7 @@
   border-radius: 10px;
 }
 
-/* ─── Fila de ajuste ─── */
+/* ─── Setting row ─── */
 .ac-setting-row {
   display: flex;
   align-items: center;
@@ -357,7 +353,7 @@
   background: #fff;
 }
 
-/* ─── Stepper (+/- botones) ─── */
+/* ─── Stepper (+/- buttons) ─── */
 .ac-stepper {
   display: flex;
   align-items: center;
@@ -463,7 +459,7 @@
   letter-spacing: 0.3px;
 }
 
-/* ─── Botones de grupo (scroll, reset) ─── */
+/* ─── Group buttons (scroll, reset) ─── */
 .ac-setting-group {
   display: flex;
   gap: 8px;
@@ -522,14 +518,44 @@
 }
 
 /* ============================================================
-   Botón toggle del panel (esquina inferior derecha)
+   Footer toggle button (inside the panel footer)
+   ============================================================ */
+
+.ac-footer-toggle {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--ac-border);
+  border-radius: 8px;
+  background: var(--ac-surface);
+  color: var(--ac-text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ac-transition);
+  padding: 0;
+}
+
+.ac-footer-toggle:hover {
+  background: var(--ac-surface-h);
+}
+
+.ac-footer-toggle:focus-visible {
+  outline: 2px solid var(--ac-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Floating toggle (visible ONLY when panel is hidden)
    ============================================================ */
 
 #aicomfort-toggle {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 2147483641;
+  z-index: 2147483642;
   width: 44px;
   height: 44px;
   border: 1px solid var(--ac-border);
@@ -538,13 +564,13 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+  color: var(--ac-text);
+  font-size: 18px;
   cursor: pointer;
-  display: flex;
+  /* display controlled by JS: none when panel open, flex when hidden */
   align-items: center;
   justify-content: center;
   transition: background var(--ac-transition), transform 0.15s ease;
-  color: var(--ac-text);
-  font-size: 18px;
   padding: 0;
 }
 
@@ -560,7 +586,7 @@
 
 
 /* ============================================================
-   Resaltado temporal
+   Temporary highlight
    ============================================================ */
 
 @keyframes ac-flash {
@@ -575,7 +601,7 @@
 }
 
 /* ============================================================
-   Estado vacío
+   Empty state
    ============================================================ */
 
 .ac-empty-state {
@@ -599,6 +625,7 @@
 
 @media (max-width: 600px) {
   #aicomfort-panel {
-    width: 270px;
+    width: 240px;
   }
 }
+
