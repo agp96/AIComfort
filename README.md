@@ -8,25 +8,27 @@
 
 ## Overview
 
-AIComfort is a Firefox extension that adds a side panel to Claude.ai, ChatGPT and Gemini. It lets you jump instantly between your prompts in long conversations and customize the reading experience to reduce eye strain.
+AIComfort is a Firefox extension that adds an isolated side panel to Claude.ai, ChatGPT and Gemini. It lets you jump instantly between your prompts in long conversations and customize the reading experience to reduce eye strain, automatically matching each site's light or dark theme.
 
 ## Features
 
 ### Prompt Navigation
 - Side panel listing all your prompts, numbered and clickable
-- Keyboard shortcuts **Alt + ↑ / ↓** to move between prompts
+- Automatic sync when switching conversations or editing prompts
+- Keyboard shortcuts **Alt + ↑ / ↓** to move between prompts (paused automatically while editing text)
 - Active prompt highlighted in the panel
+- Collapsible panel (`»` button in the header and floating `☰` button when hidden) with remembered open/closed state
 - Go to top / Go to bottom buttons
 
 ### Accessibility Settings
-- **Font size** — increase or decrease text size
-- **High contrast** — boost contrast for better readability
-- **Sepia mode** — warm tone to reduce eye strain
-- **Line height** — increase spacing between lines
+- **Font size** — scale text size from 80% to 140%
+- **High contrast** — boost conversation contrast for better readability
+- **Sepia mode** — warm tone overlay to reduce eye strain
+- **Line height** — smoothly increase spacing between lines
 - **Column width** — narrow or widen the conversation column
 - **Align left** — shift the conversation to the left side
 
-All settings are saved locally and persist across sessions.
+All settings are saved locally per site and persist across sessions.
 
 ## Supported Sites
 
@@ -49,20 +51,21 @@ Install directly from the [Firefox Add-ons page](https://addons.mozilla.org/fire
 
 ## Project Structure
 
-```
 aicomfort/
 ├── manifest.json
 ├── content.js
 ├── styles.css
+├── README.md
+├── LICENSE
 └── icons/
-    ├── icon16.png
-    ├── icon48.png
-    └── icon128.png
-```
+├── icon16.png
+├── icon48.png
+└── icon128.png
+
 
 ## Privacy
 
-AIComfort does not collect, store, or transmit any personal data. All settings are saved locally in your browser via `localStorage` and never leave your device. No external requests are made.
+AIComfort requests zero browser permissions and does not collect, store, or transmit any personal data. All settings are stored locally per site in your browser via `localStorage` and never leave your device. No external requests are made.
 
 ## Keyboard Shortcuts
 

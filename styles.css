@@ -1,38 +1,58 @@
 /* ============================================================
-   AIComfort – Styles
-   Side panel, settings, floating buttons and accessibility
+   AIComfort – Shadow DOM Styles
+   Side panel, settings, floating button and adaptive theme
    ============================================================ */
 
-/* ---------- Design variables ---------- */
-:root {
-  --ac-bg:        #1a1a2e;
-  --ac-bg-glass:  rgba(26, 26, 46, 0.88);
-  --ac-surface:   rgba(255, 255, 255, 0.07);
-  --ac-surface-h: rgba(255, 255, 255, 0.14);
-  --ac-border:    rgba(255, 255, 255, 0.12);
-  --ac-accent:    #7c5cfc;
-  --ac-accent-h:  #9b82ff;
-  --ac-text:      #ececf5;
-  --ac-text-dim:  #a9a5c4;
-  --ac-radius:    12px;
-  --ac-shadow:    0 8px 32px rgba(0, 0, 0, 0.35);
+/* ---------- Design variables (Dark default) ---------- */
+:host {
+  all: initial;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483640;
+  font-size: 16px;
+
+  --ac-bg:         #1a1a2e;
+  --ac-bg-glass:   rgba(26, 26, 46, 0.90);
+  --ac-surface:    rgba(255, 255, 255, 0.07);
+  --ac-surface-h:  rgba(255, 255, 255, 0.14);
+  --ac-border:     rgba(255, 255, 255, 0.12);
+  --ac-accent:     #7c5cfc;
+  --ac-accent-h:   #9b82ff;
+  --ac-text:       #ececf5;
+  --ac-text-dim:   #a9a5c4;
+  --ac-track-off:  rgba(255, 255, 255, 0.15);
+  --ac-value-bg:   rgba(0, 0, 0, 0.18);
+  --ac-reset-text: #ff9090;
+  --ac-radius:     12px;
+  --ac-shadow:     0 8px 32px rgba(0, 0, 0, 0.35);
   --ac-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ---------- Screen‑reader only ---------- */
-.ac-sr-only {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+/* ---------- Light theme (matches detected site theme) ---------- */
+:host([data-theme='light']) {
+  --ac-bg:         #f7f7fb;
+  --ac-bg-glass:   rgba(247, 247, 251, 0.94);
+  --ac-surface:    rgba(20, 20, 40, 0.05);
+  --ac-surface-h:  rgba(20, 20, 40, 0.11);
+  --ac-border:     rgba(20, 20, 40, 0.12);
+  --ac-accent:     #6441f5;
+  --ac-accent-h:   #5030d8;
+  --ac-text:       #1c1c2e;
+  --ac-text-dim:   #5a5875;
+  --ac-track-off:  rgba(20, 20, 40, 0.18);
+  --ac-value-bg:   rgba(20, 20, 40, 0.06);
+  --ac-reset-text: #c62828;
+  --ac-shadow:     0 8px 32px rgba(20, 20, 40, 0.14);
 }
 
-/* ---------- Panel lateral ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Side panel ---------- */
 #aicomfort-panel {
   position: fixed;
   top: 0;
@@ -44,17 +64,22 @@
   -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid var(--ac-border);
   box-shadow: var(--ac-shadow);
-  z-index: 2147483640;
+  pointer-events: auto;
   display: flex;
   flex-direction: column;
   transform: translateX(0);
-  transition: transform var(--ac-transition);
-  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif !important;
+  visibility: visible;
+  transition: transform var(--ac-transition), visibility 0s linear 0s;
+  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--ac-text);
+  line-height: 1.45;
 }
 
 #aicomfort-panel.ac-hidden {
   transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform var(--ac-transition), visibility 0s linear 0.25s;
 }
 
 /* ─── Header ─── */
@@ -62,36 +87,44 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px 10px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--ac-border);
   flex-shrink: 0;
   gap: 8px;
 }
 
-.ac-header-left {
+.ac-header-center {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
   min-width: 0;
+  gap: 2px;
 }
 
 #aicomfort-header h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   background: linear-gradient(135deg, var(--ac-accent), var(--ac-accent-h));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  display: flex;
-  align-items: center;
-  gap: 7px;
   white-space: nowrap;
 }
 
-/* ─── Settings button in header ─── */
-#aicomfort-settings-btn {
+#aicomfort-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ac-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ─── Header icon buttons ─── */
+.ac-icon-btn {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
@@ -108,28 +141,18 @@
   padding: 0;
 }
 
-#aicomfort-settings-btn:hover,
-#aicomfort-settings-btn:focus-visible {
+.ac-icon-btn:hover,
+.ac-icon-btn:focus-visible {
   background: var(--ac-surface-h);
-  transform: scale(1.08);
+  transform: scale(1.06);
   outline: 2px solid var(--ac-accent);
   outline-offset: 2px;
 }
 
 #aicomfort-settings-btn[aria-pressed='true'] {
   background: var(--ac-accent);
+  border-color: var(--ac-accent);
   color: #fff;
-}
-
-#aicomfort-badge {
-  font-size: 11px;
-  font-weight: 600;
-  background: var(--ac-surface);
-  color: var(--ac-text-dim);
-  border-radius: 20px;
-  padding: 2px 10px;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 /* ─── Views (prompts / settings) ─── */
@@ -187,11 +210,13 @@
   outline-offset: -2px;
 }
 
-.ac-prompt-item:active { transform: scale(0.98); }
+.ac-prompt-item:active {
+  transform: scale(0.98);
+}
 
 .ac-prompt-item.ac-active {
-  background: rgba(124, 92, 252, 0.14);
-  border-color: rgba(124, 92, 252, 0.35);
+  background: rgba(124, 92, 252, 0.15);
+  border-color: rgba(124, 92, 252, 0.40);
 }
 
 .ac-prompt-number {
@@ -224,13 +249,13 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .ac-shortcut-hint {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 11px;
   color: var(--ac-text-dim);
 }
@@ -268,11 +293,11 @@
   border-radius: 10px;
 }
 
-/* ─── Setting row ─── */
 .ac-setting-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   padding: 10px 12px;
   border-radius: 10px;
   background: var(--ac-surface);
@@ -294,6 +319,12 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--ac-text);
+}
+
+.ac-clickable-label {
+  flex: 1;
+  cursor: pointer;
+  user-select: none;
 }
 
 .ac-divider {
@@ -325,7 +356,7 @@
   width: 44px;
   height: 24px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--ac-track-off);
   border: 1px solid var(--ac-border);
   transition: background var(--ac-transition);
   position: relative;
@@ -357,14 +388,14 @@
 .ac-stepper {
   display: flex;
   align-items: center;
-  gap: 0;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--ac-border);
+  flex-shrink: 0;
 }
 
 .ac-stepper-btn {
-  width: 32px;
+  width: 30px;
   height: 30px;
   border: none;
   background: var(--ac-surface);
@@ -389,13 +420,13 @@
 }
 
 .ac-stepper-value {
-  width: 36px;
+  width: 48px;
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'SF Mono', 'Consolas', monospace;
   color: var(--ac-text);
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--ac-value-bg);
   line-height: 30px;
   user-select: none;
 }
@@ -407,7 +438,7 @@
   width: 100%;
   height: 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--ac-track-off);
   outline: none;
   transition: background var(--ac-transition);
 }
@@ -444,7 +475,6 @@
   outline-offset: 3px;
 }
 
-/* ─── Slider label row (label + hint) ─── */
 .ac-slider-label-row {
   display: flex;
   align-items: center;
@@ -498,8 +528,8 @@
 }
 
 .ac-scroll-nav-btn {
-  background: linear-gradient(135deg, rgba(124, 92, 252, 0.15), rgba(155, 130, 255, 0.10));
-  border-color: rgba(124, 92, 252, 0.25);
+  background: linear-gradient(135deg, rgba(124, 92, 252, 0.16), rgba(155, 130, 255, 0.10));
+  border-color: rgba(124, 92, 252, 0.28);
 }
 
 .ac-scroll-nav-btn:hover {
@@ -509,42 +539,12 @@
 .ac-reset-btn {
   margin-top: 6px;
   background: rgba(255, 80, 80, 0.08);
-  border-color: rgba(255, 80, 80, 0.18);
-  color: #ff9090;
+  border-color: rgba(255, 80, 80, 0.22);
+  color: var(--ac-reset-text);
 }
 
 .ac-reset-btn:hover {
   background: rgba(255, 80, 80, 0.18);
-}
-
-/* ============================================================
-   Footer toggle button (inside the panel footer)
-   ============================================================ */
-
-.ac-footer-toggle {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  border: 1px solid var(--ac-border);
-  border-radius: 8px;
-  background: var(--ac-surface);
-  color: var(--ac-text);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--ac-transition);
-  padding: 0;
-}
-
-.ac-footer-toggle:hover {
-  background: var(--ac-surface-h);
-}
-
-.ac-footer-toggle:focus-visible {
-  outline: 2px solid var(--ac-accent);
-  outline-offset: 2px;
 }
 
 /* ============================================================
@@ -555,7 +555,7 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 2147483642;
+  pointer-events: auto;
   width: 44px;
   height: 44px;
   border: 1px solid var(--ac-border);
@@ -563,11 +563,10 @@
   background: var(--ac-bg-glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
   color: var(--ac-text);
   font-size: 18px;
   cursor: pointer;
-  /* display controlled by JS: none when panel open, flex when hidden */
   align-items: center;
   justify-content: center;
   transition: background var(--ac-transition), transform 0.15s ease;
@@ -582,22 +581,6 @@
 #aicomfort-toggle:focus-visible {
   outline: 2px solid var(--ac-accent);
   outline-offset: 3px;
-}
-
-
-/* ============================================================
-   Temporary highlight
-   ============================================================ */
-
-@keyframes ac-flash {
-  0%   { box-shadow: 0 0 0 0 rgba(124, 92, 252, 0.50); }
-  50%  { box-shadow: 0 0 0 6px rgba(124, 92, 252, 0.18); }
-  100% { box-shadow: 0 0 0 0 rgba(124, 92, 252, 0); }
-}
-
-.ac-highlight {
-  animation: ac-flash 0.8s ease-out;
-  border-radius: 8px;
 }
 
 /* ============================================================
@@ -616,8 +599,15 @@
   gap: 12px;
 }
 
-.ac-empty-icon { font-size: 36px; opacity: 0.5; }
-.ac-empty-text { font-size: 13px; line-height: 1.5; }
+.ac-empty-icon {
+  font-size: 36px;
+  opacity: 0.5;
+}
+
+.ac-empty-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
 
 /* ============================================================
    Responsive
@@ -628,4 +618,3 @@
     width: 240px;
   }
 }
-
